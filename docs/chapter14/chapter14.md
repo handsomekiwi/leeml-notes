@@ -21,12 +21,12 @@
 3. 总体损失函数(Total loss function)是定义在整个训练集上面的，也就是所有样本的误差的总和。也就是平时我们反向传播需要最小化的值。
 ![](res/chapter14-3.png)
 
-对于$L(\theta)$就是所有$l^n$的损失之和，所以如果要算每个$L(\theta)$的偏微分，我们只要算每个$l^n$的偏微分，再把所有$l^n$偏微分的结果加起来就是$L(\theta)$的偏微分，所以等下我们只计算每个$l^n​$的偏微分。
+对于$L(\theta)$就是所有$l^n$的损失之和，所以如果要算每个$L(\theta)$的偏微分，我们只要算每个$C^n$的偏微分，再把所有$C^n$偏微分的结果加起来就是$L(\theta)$的偏微分，所以等下我们只计算每个$l^n​$的偏微分。
 我们先在整个神经网络（Neural network）中抽取出一小部分的神经（Neuron）去看（也就是红色标注的地方）：
 ![](res/chapter14-4.png)
 
 #### 取出一个Neuron进行分析
-![](res/chapter14-5.png)
+![](res/chapter14-5_LI.png)
 从这一小部分中去看，把计算梯度分成两个部分
 
 - 计算$\frac{\partial z}{\partial w}$（Forward pass的部分）
@@ -38,22 +38,23 @@
 
 根据求微分原理，forward pass的运算规律就是：
 
-$\frac{\partial z}{\partial w_1} = x_1 \\ \frac{\partial z}{\partial w_2} = x_2$
+秒算$\frac{\partial z}{\partial w_1} = x_1 \\ \frac{\partial z}{\partial w_2} = x_2$
 这里计算得到的$x_1$和$x_2$恰好就是输入的$x_1$和$x_2$
+結論:要算nn每個W對activation function input的偏微分，就把input丟進去，計算output就行了
 直接使用数字，更直观地看到运算规律：
-![](res/chapter14-7.png)
+![](res/Inkedchapter14-7_LI.jpg)
 
 
 
 ### Backward Pass
- (Backward pass的部分)这就很困难复杂因为我们的l是最后一层：
+ (Backward pass的部分)这就很困难复杂因为我们的C是最后一层才產生的：
 那怎么计算 $\frac{\partial l}{\partial z}$ （Backward pass的部分）这就很困难复杂因为我们的$l$是最后一层：
 
-![](res/chapter14-8.png)
+![](res/Inkedchapter14-8_LI.jpg)
 
 计算所有激活函数的偏微分，激活函数有很多，这里使用Sigmoid函数为例
 
-这里使用链式法则（Chain Rule）的case1，计算过程如下：
+这里使用链式法则（Chain Rule）的case1，计算过程如下(假設a後面的nn只有兩項)：
 
 $\frac{\partial l}{\partial z} = \frac{\partial a}{\partial z}\frac{\partial l}{\partial a} \Rightarrow   {\sigma}'(z)​$
 $\frac{\partial l}{\partial a} = \frac{\partial z'}{\partial a}\frac{\partial l}{\partial z'} +\frac{\partial z''}{\partial a}\frac{\partial l}{\partial z''}​$
@@ -63,13 +64,13 @@ $\frac{\partial l}{\partial a} = \frac{\partial z'}{\partial a}\frac{\partial l}
 
 ![](res/chapter14-10.png)
 
-但是你可以想象从另外一个角度看这个事情，现在有另外一个神经元，把forward的过程逆向过来,其中${\sigma}'(z)$是常数，因为它在向前传播的时候就已经确定了
+但是你可以想象从另外一个角度看这个事情，现在假設有另外一个神经元，把forward的过程逆向过来,其中${\sigma}'(z)$是常数，因为它在向前传播的时候就已经确定了
 
 ![](res/chapter14-11.png)
-
+只要算出w3後面的$\frac{\partial C}{\partial z'}$和w4後面的$\frac{\partial C}{\partial z''}​$那就解決了，那怎麼算?
 #### case 1 : Output layer
-假设$\frac{\partial l}{\partial z'}$和$\frac{\partial l}{\partial z''}​$是最后一层的隐藏层
-也就是就是y1与y2是输出值，那么直接计算就能得出结果
+假设$\frac{\partial C}{\partial z'}$和$\frac{\partial C}{\partial z''}​$是最后一层的隐藏层
+也就是就是y1与y2是输出值，那么直接计算就能得出结果(秒算)
 ![](res/chapter14-12.png)
 
 但是如果不是最后一层，计算$\frac{\partial l}{\partial z'}$和$\frac{\partial l}{\partial z''}​$的话就需要继续往后一直通过链式法则算下去
