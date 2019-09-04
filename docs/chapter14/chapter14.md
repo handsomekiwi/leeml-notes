@@ -84,7 +84,7 @@ $\frac{\partial l}{\partial a} = \frac{\partial z'}{\partial a}\frac{\partial l}
 ![](res/chapter14-15.png)
 
 实际上进行backward pass时候和向前传播的计算量差不多。
-
+backward pass 實作是建一個反向的nn，做完forward pass再做運算
 ## 总结
 我们的目标是要求计算$\frac{\partial z}{\partial w}$（Forward pass的部分）和计算$\frac{\partial l}{\partial z}$ ( Backward pass的部分 )，然后把$\frac{\partial z}{\partial w}$和$\frac{\partial l}{\partial z}$相乘，我们就可以得到$\frac{\partial l}{\partial w}$,所有我们就可以得到神经网络中所有的参数，然后用梯度下降就可以不断更新，得到损失最小的函数
 ![](res/chapter14-16.png)
